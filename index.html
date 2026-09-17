@@ -1,202 +1,391 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BountyLens — Find Bounties Worth Your Time</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BountyLens</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#080b10;
+  color:white;
+}
+.container{
+  max-width:920px;
+  margin:auto;
+  padding:55px 24px 100px;
+}
+.logo{
+  font-size:22px;
+  font-weight:700;
+  margin-bottom:55px;
+}
+.logo span{color:#7c5cff}
+h1{
+  font-size:50px;
+  margin:0 0 15px;
+}
+.subtitle{
+  color:#9ba3b4;
+  font-size:18px;
+  line-height:1.5;
+  max-width:700px;
+  margin-bottom:35px;
+}
+.panel{
+  background:#11151d;
+  border:1px solid #242a36;
+  border-radius:18px;
+  padding:24px;
+}
+label{
+  display:block;
+  font-size:13px;
+  color:#aeb5c3;
+  margin:0 0 9px;
+}
+input,textarea{
+  width:100%;
+  background:#080b10;
+  border:1px solid #303746;
+  border-radius:10px;
+  padding:15px;
+  color:white;
+  font-size:15px;
+  outline:none;
+}
+textarea{
+  height:180px;
+  resize:vertical;
+  margin-bottom:18px;
+}
+input{margin-bottom:18px}
+button{
+  width:100%;
+  border:0;
+  border-radius:10px;
+  padding:16px;
+  background:#7c5cff;
+  color:white;
+  font-weight:700;
+  font-size:16px;
+  cursor:pointer;
+}
+button:hover{opacity:.9}
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #080b10;
-      color: #ffffff;
-    }
+.results{
+  display:none;
+  margin-top:28px;
+}
+.results h2{margin-bottom:18px}
 
-    .container {
-      max-width: 900px;
-      margin: auto;
-      padding: 80px 24px;
-    }
+.score{
+  padding:18px;
+  border:1px solid #303746;
+  border-radius:14px;
+  background:#0d1118;
+  margin-bottom:15px;
+}
+.score-number{
+  font-size:34px;
+  font-weight:bold;
+}
+.score-label{
+  color:#9ba3b4;
+  font-size:13px;
+}
 
-    .logo {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 80px;
-    }
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+.card{
+  padding:17px;
+  background:#0d1118;
+  border:1px solid #242a36;
+  border-radius:12px;
+}
+.card-title{
+  color:#7f8899;
+  font-size:12px;
+  margin-bottom:7px;
+  text-transform:uppercase;
+}
+.card-value{
+  font-weight:700;
+  line-height:1.4;
+}
 
-    .logo span {
-      color: #7c5cff;
-    }
+.warning{
+  margin-top:15px;
+  padding:17px;
+  border-radius:12px;
+  background:#17120c;
+  border:1px solid #47351d;
+}
+.warning strong{
+  display:block;
+  margin-bottom:8px;
+}
+.warning div{
+  color:#c9b28e;
+  line-height:1.5;
+}
 
-    h1 {
-      font-size: 56px;
-      line-height: 1.05;
-      margin: 0 0 20px;
-      max-width: 750px;
-    }
+.note{
+  margin-top:15px;
+  color:#667085;
+  font-size:12px;
+}
 
-    .subtitle {
-      color: #9ba3b4;
-      font-size: 20px;
-      line-height: 1.5;
-      max-width: 650px;
-      margin-bottom: 45px;
-    }
-
-    .analyzer {
-      background: #11151d;
-      border: 1px solid #242a36;
-      border-radius: 18px;
-      padding: 24px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 10px;
-      font-size: 14px;
-      color: #aeb5c3;
-    }
-
-    .input-row {
-      display: flex;
-      gap: 10px;
-    }
-
-    input {
-      flex: 1;
-      background: #080b10;
-      border: 1px solid #303746;
-      border-radius: 10px;
-      padding: 16px;
-      color: white;
-      font-size: 16px;
-      outline: none;
-    }
-
-    button {
-      border: 0;
-      border-radius: 10px;
-      padding: 0 28px;
-      background: #7c5cff;
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 15px;
-    }
-
-    .hint {
-      margin-top: 14px;
-      color: #667085;
-      font-size: 13px;
-    }
-
-    .features {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      margin-top: 50px;
-    }
-
-    .feature {
-      padding: 20px;
-      background: #0d1118;
-      border: 1px solid #1d2330;
-      border-radius: 14px;
-    }
-
-    .feature strong {
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    .feature span {
-      color: #7f8899;
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    @media (max-width: 700px) {
-      h1 {
-        font-size: 40px;
-      }
-
-      .input-row {
-        flex-direction: column;
-      }
-
-      button {
-        padding: 16px;
-      }
-
-      .features {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+@media(max-width:650px){
+  h1{font-size:38px}
+  .grid{grid-template-columns:1fr}
+}
+</style>
 </head>
 
 <body>
+<main class="container">
 
-  <main class="container">
+<div class="logo">Bounty<span>Lens</span></div>
 
-    <div class="logo">
-      Bounty<span>Lens</span>
-    </div>
+<h1>Know before you build.</h1>
 
-    <h1>Stop wasting time on bad bounties.</h1>
+<p class="subtitle">
+Paste the bounty description below. BountyLens checks the real payout,
+competition and requirements that can make an opportunity not worth your time.
+</p>
 
-    <p class="subtitle">
-      Paste any Web3 bounty. BountyLens analyzes the real payout,
-      requirements, competition and hidden catches before you spend hours working on it.
-    </p>
+<section class="panel">
 
-    <section class="analyzer">
+<label>Bounty URL (optional)</label>
+<input id="url" placeholder="https://earn.superteam.fun/listing/...">
 
-      <label for="bountyUrl">Bounty URL</label>
+<label>Bounty description / requirements</label>
+<textarea id="text" placeholder="Paste the complete bounty description here..."></textarea>
 
-      <div class="input-row">
-        <input
-          id="bountyUrl"
-          type="url"
-          placeholder="https://earn.superteam.fun/listing/..."
-        >
+<button onclick="analyzeBounty()">Analyze bounty</button>
 
-        <button type="button">
-          Analyze
-        </button>
-      </div>
+<div class="note">
+Prototype analyzer — results are extracted from the text you provide.
+</div>
 
-      <div class="hint">
-        Superteam · GitHub · First Dollar · Hackathons · Bug bounties
-      </div>
+</section>
 
-    </section>
+<section class="results" id="results">
 
-    <section class="features">
+<h2>Analysis</h2>
 
-      <div class="feature">
-        <strong>💰 Real payout</strong>
-        <span>See what you can actually win — not a misleading total prize pool.</span>
-      </div>
+<div class="score">
+<div class="score-number" id="score">--</div>
+<div class="score-label">BountyLens opportunity score</div>
+</div>
 
-      <div class="feature">
-        <strong>⚠️ Hidden requirements</strong>
-        <span>KYC, deposits, public posts, followers and other catches.</span>
-      </div>
+<div class="grid">
 
-      <div class="feature">
-        <strong>🎯 Personal match</strong>
-        <span>Know whether a bounty fits your skills before starting.</span>
-      </div>
+<div class="card">
+<div class="card-title">💰 Prize information</div>
+<div class="card-value" id="prize">Not detected</div>
+</div>
 
-    </section>
+<div class="card">
+<div class="card-title">🏆 Winners</div>
+<div class="card-value" id="winners">Not detected</div>
+</div>
 
-  </main>
+<div class="card">
+<div class="card-title">🪪 KYC</div>
+<div class="card-value" id="kyc">Not mentioned</div>
+</div>
+
+<div class="card">
+<div class="card-title">💳 Deposit / funds</div>
+<div class="card-value" id="deposit">Not detected</div>
+</div>
+
+<div class="card">
+<div class="card-title">📢 Public content</div>
+<div class="card-value" id="social">Not detected</div>
+</div>
+
+<div class="card">
+<div class="card-title">💻 Coding</div>
+<div class="card-value" id="coding">Not detected</div>
+</div>
+
+</div>
+
+<div class="warning">
+<strong>⚠️ Possible catches</strong>
+<div id="warnings">None detected.</div>
+</div>
+
+</section>
+
+</main>
+
+<script>
+function containsAny(text, words){
+  return words.some(word => text.includes(word));
+}
+
+function analyzeBounty(){
+
+  const raw = document.getElementById("text").value.trim();
+
+  if(!raw){
+    alert("Paste the bounty description first.");
+    return;
+  }
+
+  const text = raw.toLowerCase();
+  let score = 100;
+  let warnings = [];
+
+  // PRIZE
+  const moneyMatches = raw.match(
+    /(?:\$|USDC\s*|USDG\s*)\s?[\d,]+(?:\.\d+)?|[\d,]+(?:\.\d+)?\s?(?:USDC|USDG|USD)/gi
+  );
+
+  document.getElementById("prize").innerText =
+    moneyMatches ? [...new Set(moneyMatches)].slice(0,8).join(" · ") : "Not detected";
+
+  // WINNERS
+  const winnerMatch =
+    raw.match(/(\d+)\s*(?:winners?|prizes?)/i) ||
+    raw.match(/top\s*(\d+)/i);
+
+  document.getElementById("winners").innerText =
+    winnerMatch ? winnerMatch[1] + " mentioned" : "Not detected";
+
+  // KYC
+  if(containsAny(text,["kyc","identity verification","verified identity"])){
+    document.getElementById("kyc").innerText = "⚠️ Mentioned";
+    warnings.push("KYC or identity verification appears in the requirements.");
+    score -= 15;
+  } else {
+    document.getElementById("kyc").innerText = "✓ Not mentioned";
+  }
+
+  // DEPOSIT / REAL FUNDS
+  if(containsAny(text,[
+    "deposit",
+    "real funds",
+    "own funds",
+    "mainnet trade",
+    "trading volume",
+    "minimum trade",
+    "execute trades"
+  ])){
+    document.getElementById("deposit").innerText = "⚠️ May be required";
+    warnings.push("The task may require capital, deposits or real trading.");
+    score -= 25;
+  } else {
+    document.getElementById("deposit").innerText = "✓ Not detected";
+  }
+
+  // SOCIAL
+  if(containsAny(text,[
+    "post on x",
+    "x thread",
+    "twitter thread",
+    "public x",
+    "tweet",
+    "followers",
+    "tag @",
+    "post publicly",
+    "social media"
+  ])){
+    document.getElementById("social").innerText = "⚠️ Required / mentioned";
+    warnings.push("Public social-media activity appears to be required.");
+    score -= 20;
+  } else {
+    document.getElementById("social").innerText = "✓ Not detected";
+  }
+
+  // CODING
+  if(containsAny(text,[
+    "github repo",
+    "github repository",
+    "smart contract",
+    "build an app",
+    "build a",
+    "deploy",
+    "pull request",
+    "source code",
+    "sdk",
+    "api integration"
+  ])){
+    document.getElementById("coding").innerText = "⚠️ Likely required";
+    warnings.push("Development or coding work appears to be required.");
+    score -= 15;
+  } else {
+    document.getElementById("coding").innerText = "✓ Not detected";
+  }
+
+  // COMPETITION / WINNER-TAKES-MOST
+  if(containsAny(text,[
+    "1st place",
+    "2nd place",
+    "3rd place",
+    "first place",
+    "winner takes"
+  ])){
+    warnings.push("This appears to be a competition rather than guaranteed payment.");
+    score -= 10;
+  }
+
+  // VIDEO
+  if(containsAny(text,[
+    "demo video",
+    "video demonstration",
+    "youtube",
+    "tiktok",
+    "instagram",
+    "record a video"
+  ])){
+    warnings.push("A video or public demonstration may be required.");
+    score -= 10;
+  }
+
+  // OUTREACH
+  if(containsAny(text,[
+    "outreach",
+    "introduce projects",
+    "decision-maker",
+    "onboard projects",
+    "bring new clients"
+  ])){
+    warnings.push("The bounty may involve outreach or sales.");
+    score -= 25;
+  }
+
+  score = Math.max(0,score);
+
+  let label = "Strong";
+  if(score < 75) label = "Mixed";
+  if(score < 50) label = "Poor";
+
+  document.getElementById("score").innerText =
+    score + "/100 — " + label;
+
+  document.getElementById("warnings").innerHTML =
+    warnings.length
+      ? warnings.map(w => "• " + w).join("<br>")
+      : "No obvious catches detected in the supplied text.";
+
+  document.getElementById("results").style.display = "block";
+
+  document.getElementById("results").scrollIntoView({
+    behavior:"smooth"
+  });
+}
+</script>
 
 </body>
 </html>
