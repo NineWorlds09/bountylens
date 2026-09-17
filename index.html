@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BountyLens — Find Bounties Worth Your Time</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #080b10;
+      color: #ffffff;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 80px 24px;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 80px;
+    }
+
+    .logo span {
+      color: #7c5cff;
+    }
+
+    h1 {
+      font-size: 56px;
+      line-height: 1.05;
+      margin: 0 0 20px;
+      max-width: 750px;
+    }
+
+    .subtitle {
+      color: #9ba3b4;
+      font-size: 20px;
+      line-height: 1.5;
+      max-width: 650px;
+      margin-bottom: 45px;
+    }
+
+    .analyzer {
+      background: #11151d;
+      border: 1px solid #242a36;
+      border-radius: 18px;
+      padding: 24px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #aeb5c3;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    input {
+      flex: 1;
+      background: #080b10;
+      border: 1px solid #303746;
+      border-radius: 10px;
+      padding: 16px;
+      color: white;
+      font-size: 16px;
+      outline: none;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 0 28px;
+      background: #7c5cff;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .hint {
+      margin-top: 14px;
+      color: #667085;
+      font-size: 13px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 50px;
+    }
+
+    .feature {
+      padding: 20px;
+      background: #0d1118;
+      border: 1px solid #1d2330;
+      border-radius: 14px;
+    }
+
+    .feature strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .feature span {
+      color: #7f8899;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 700px) {
+      h1 {
+        font-size: 40px;
+      }
+
+      .input-row {
+        flex-direction: column;
+      }
+
+      button {
+        padding: 16px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="container">
+
+    <div class="logo">
+      Bounty<span>Lens</span>
+    </div>
+
+    <h1>Stop wasting time on bad bounties.</h1>
+
+    <p class="subtitle">
+      Paste any Web3 bounty. BountyLens analyzes the real payout,
+      requirements, competition and hidden catches before you spend hours working on it.
+    </p>
+
+    <section class="analyzer">
+
+      <label for="bountyUrl">Bounty URL</label>
+
+      <div class="input-row">
+        <input
+          id="bountyUrl"
+          type="url"
+          placeholder="https://earn.superteam.fun/listing/..."
+        >
+
+        <button type="button">
+          Analyze
+        </button>
+      </div>
+
+      <div class="hint">
+        Superteam · GitHub · First Dollar · Hackathons · Bug bounties
+      </div>
+
+    </section>
+
+    <section class="features">
+
+      <div class="feature">
+        <strong>💰 Real payout</strong>
+        <span>See what you can actually win — not a misleading total prize pool.</span>
+      </div>
+
+      <div class="feature">
+        <strong>⚠️ Hidden requirements</strong>
+        <span>KYC, deposits, public posts, followers and other catches.</span>
+      </div>
+
+      <div class="feature">
+        <strong>🎯 Personal match</strong>
+        <span>Know whether a bounty fits your skills before starting.</span>
+      </div>
+
+    </section>
+
+  </main>
+
+</body>
+</html>
