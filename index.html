@@ -234,156 +234,122 @@ function containsAny(text, words){
   return words.some(word => text.includes(word));
 }
 
-function analyzeBounty(){
-
+async function analyzeBounty() {
   const raw = document.getElementById("text").value.trim();
 
-  if(!raw){
+  if (!raw) {
     alert("Paste the bounty description first.");
     return;
   }
 
-  const text = raw.toLowerCase();
-  let score = 100;
-  let warnings = [];
+  const button = document.querySelector("button[onclick='analyzeBounty()']");
+  const originalButtonText = button ? button.innerText : "";
 
-  // PRIZE
-  const moneyMatches = raw.match(
-    /(?:\$|USDC\s*|USDG\s*)\s?[\d,]+(?:\.\d+)?|[\d,]+(?:\.\d+)?\s?(?:USDC|USDG|USD)/gi
-  );
-
-  document.getElementById("prize").innerText =
-    moneyMatches ? [...new Set(moneyMatches)].slice(0,8).join(" · ") : "Not detected";
-
-  // WINNERS
-  const winnerMatch =
-    raw.match(/(\d+)\s*(?:winners?|prizes?)/i) ||
-    raw.match(/top\s*(\d+)/i);
-
-  document.getElementById("winners").innerText =
-    winnerMatch ? winnerMatch[1] + " mentioned" : "Not detected";
-
-  // KYC
-  if(containsAny(text,["kyc","identity verification","verified identity"])){
-    document.getElementById("kyc").innerText = "⚠️ Mentioned";
-    warnings.push("KYC or identity verification appears in the requirements.");
-    score -= 15;
-  } else {
-    document.getElementById("kyc").innerText = "✓ Not mentioned";
+  if (button) {
+    button.disabled = true;
+    button.innerText = "Analyzing with AI...";
   }
 
-  // DEPOSIT / REAL FUNDS
-  if(containsAny(text,[
-    "deposit",
-    "real funds",
-    "own funds",
-    "mainnet trade",
-    "trading volume",
-    "minimum trade",
-    "execute trades"
-  ])){
-    document.getElementById("deposit").innerText = "⚠️ May be required";
-    warnings.push("The task may require capital, deposits or real trading.");
-    score -= 25;
-  } else {
-    document.getElementById("deposit").innerText = "✓ Not detected";
+  try {
+    const response = await fetch(
+      "https://bountylens-api.nineworlds29.workers.dev/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          description: raw
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.error || "AI analysis failed");
+    }
+
+    const analysis = data.analysis || {};
+
+    document.getElementById("score").innerText =
+      (analysis.score ?? "—") +
+      "/100 — " +
+      (analysis.label || "AI Analysis");
+
+    document.getElementById("prize").innerText =
+      analysis.realPayout || "Not mentioned";
+
+    document.getElementById("winners").innerText =
+      analysis.winners || "Not mentioned";
+
+    document.getElementById("kyc").innerText =
+      analysis.kyc || "Not mentioned";
+
+    document.getElementById("deposit").innerText =
+      analysis.deposit || "Not mentioned";
+
+    document.getElementById("social").innerText =
+      analysis.publicContent || "Not mentioned";
+
+    document.getElementById("coding").innerText =
+      analysis.coding || "Not mentioned";
+
+    const catches = Array.isArray(analysis.catches)
+      ? analysis.catches
+      : [];
+
+    const requirements = Array.isArray(analysis.requirements)
+      ? analysis.requirements
+      : [];
+
+    let details = [];
+
+    if (catches.length) {
+      details.push(
+        "<strong>⚠️ Possible catches</strong><br>" +
+        catches.map(item => "• " + item).join("<br>")
+      );
+    }
+
+    if (requirements.length) {
+      details.push(
+        "<strong>📋 Requirements</strong><br>" +
+        requirements.map(item => "• " + item).join("<br>")
+      );
+    }
+
+    if (analysis.recommendation) {
+      details.push(
+        "<strong>🤖 AI assessment</strong><br>" +
+        analysis.recommendation
+      );
+    }
+
+    document.getElementById("warnings").innerHTML =
+      details.length
+        ? details.join("<br><br>")
+        : "No major catches detected by AI.";
+
+    document.getElementById("results").style.display = "block";
+
+    document.getElementById("results").scrollIntoView({
+      behavior: "smooth"
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    alert(
+      "BountyLens AI could not complete the analysis: " +
+      error.message
+    );
+  } finally {
+    if (button) {
+      button.disabled = false;
+      button.innerText = originalButtonText || "Analyze bounty";
+    }
   }
-
-  // SOCIAL
-  if(containsAny(text,[
-    "post on x",
-    "x thread",
-    "twitter thread",
-    "public x",
-    "tweet",
-    "followers",
-    "tag @",
-    "post publicly",
-    "social media"
-  ])){
-    document.getElementById("social").innerText = "⚠️ Required / mentioned";
-    warnings.push("Public social-media activity appears to be required.");
-    score -= 20;
-  } else {
-    document.getElementById("social").innerText = "✓ Not detected";
-  }
-
-  // CODING
-  if(containsAny(text,[
-    "github repo",
-    "github repository",
-    "smart contract",
-    "build an app",
-    "build a",
-    "deploy",
-    "pull request",
-    "source code",
-    "sdk",
-    "api integration"
-  ])){
-    document.getElementById("coding").innerText = "⚠️ Likely required";
-    warnings.push("Development or coding work appears to be required.");
-    score -= 15;
-  } else {
-    document.getElementById("coding").innerText = "✓ Not detected";
-  }
-
-  // COMPETITION / WINNER-TAKES-MOST
-  if(containsAny(text,[
-    "1st place",
-    "2nd place",
-    "3rd place",
-    "first place",
-    "winner takes"
-  ])){
-    warnings.push("This appears to be a competition rather than guaranteed payment.");
-    score -= 10;
-  }
-
-  // VIDEO
-  if(containsAny(text,[
-    "demo video",
-    "video demonstration",
-    "youtube",
-    "tiktok",
-    "instagram",
-    "record a video"
-  ])){
-    warnings.push("A video or public demonstration may be required.");
-    score -= 10;
-  }
-
-  // OUTREACH
-  if(containsAny(text,[
-    "outreach",
-    "introduce projects",
-    "decision-maker",
-    "onboard projects",
-    "bring new clients"
-  ])){
-    warnings.push("The bounty may involve outreach or sales.");
-    score -= 25;
-  }
-
-  score = Math.max(0,score);
-
-  let label = "Strong";
-  if(score < 75) label = "Mixed";
-  if(score < 50) label = "Poor";
-
-  document.getElementById("score").innerText =
-    score + "/100 — " + label;
-
-  document.getElementById("warnings").innerHTML =
-    warnings.length
-      ? warnings.map(w => "• " + w).join("<br>")
-      : "No obvious catches detected in the supplied text.";
-
-  document.getElementById("results").style.display = "block";
-
-  document.getElementById("results").scrollIntoView({
-    behavior:"smooth"
-  });
 }
 </script>
 
