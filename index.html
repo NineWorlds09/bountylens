@@ -241,10 +241,10 @@ function containsAny(text, words){
 async function analyzeBounty() {
   const raw = document.getElementById("text").value.trim();
 const bountyUrl = document.getElementById("url").value.trim();
-  if (!raw) {
-    alert("Paste the bounty description first.");
-    return;
-  }
+ if (!raw && !bountyUrl) {
+  alert("Paste a bounty URL or description first.");
+  return;
+}
 
   const button = document.querySelector("button[onclick='analyzeBounty()']");
   const originalButtonText = button ? button.innerText : "";
