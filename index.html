@@ -275,7 +275,7 @@ async function analyzeBounty() {
     document.getElementById("score").innerText =
       (analysis.score ?? "—") +
       "/100 — " +
-      (analysis.label || "AI Analysis");
+      (analysis.verdict || "AI Analysis");
 
     document.getElementById("prize").innerText =
       analysis.realPayout || "Not mentioned";
@@ -307,7 +307,7 @@ async function analyzeBounty() {
 
     if (catches.length) {
       details.push(
-        "<strong>⚠️ Possible catches</strong><br>" +
+         "" +
         catches.map(item => "• " + item).join("<br>")
       );
     }
