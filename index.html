@@ -240,7 +240,7 @@ function containsAny(text, words){
 
 async function analyzeBounty() {
   const raw = document.getElementById("text").value.trim();
-
+const bountyUrl = document.getElementById("url").value.trim();
   if (!raw) {
     alert("Paste the bounty description first.");
     return;
@@ -263,8 +263,9 @@ async function analyzeBounty() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          description: raw
-        })
+  description: raw,
+  url: bountyUrl
+})
       }
     );
 
