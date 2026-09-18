@@ -190,7 +190,11 @@ Prototype analyzer — results are extracted from the text you provide.
 
 <div class="card">
 <div class="card-title">💰 Prize information</div>
-<div class="card-value" id="prize">Not detected</div>
+<div class="card-value">
+  <div>Total pool: <strong id="totalPrizePool">Not mentioned</strong></div>
+  <div>Possible payout: <strong id="payoutRange">Not mentioned</strong></div>
+  <div>Prizes: <strong id="prize">Not detected</strong></div>
+</div>
 </div>
 
 <div class="card">
@@ -276,6 +280,11 @@ async function analyzeBounty() {
       (analysis.score ?? "—") +
       "/100 — " +
       (analysis.verdict || "AI Analysis");
+document.getElementById("totalPrizePool").innerText =
+  analysis.totalPrizePool || "Not mentioned";
+
+document.getElementById("payoutRange").innerText =
+  analysis.payoutRange || "Not mentioned";
 
     document.getElementById("prize").innerText =
       analysis.realPayout || "Not mentioned";
