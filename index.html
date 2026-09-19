@@ -201,7 +201,10 @@ Prototype analyzer — results are extracted from the text you provide.
 <div class="card-title">🏆 Winners</div>
 <div class="card-value" id="winners">Not detected</div>
 </div>
-
+<div class="card">
+  <div class="card-title">👥 Submissions</div>
+  <div class="card-value" id="submissions">Not mentioned</div>
+</div>
 <div class="card">
 <div class="card-title">🪪 KYC</div>
 <div class="card-value" id="kyc">Not mentioned</div>
@@ -299,7 +302,8 @@ document.getElementById("payoutRange").innerText =
 
     document.getElementById("winners").innerText =
       analysis.winners || "Not mentioned";
-
+document.getElementById("submissions").innerText =
+  analysis.submissions || "Not mentioned";
     document.getElementById("kyc").innerText =
       analysis.kyc || "Not mentioned";
 
