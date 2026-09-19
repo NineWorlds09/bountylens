@@ -286,7 +286,9 @@ const bountyUrl = document.getElementById("url").value.trim();
     }
 
     const analysis = data.analysis || {};
-
+const scoreBreakdown = Array.isArray(analysis.scoreBreakdown)
+  ? analysis.scoreBreakdown
+  : [];
     document.getElementById("score").innerText =
       (analysis.score ?? "—") +
       "/100 — " +
@@ -326,7 +328,12 @@ document.getElementById("trading").innerText =
       : [];
 
     let details = [];
-
+if (scoreBreakdown.length) {
+  details.push(
+    "<strong>📊 Why this score</strong><br><br>" +
+    scoreBreakdown.map(item => "• " + item).join("<br>")
+  );
+}
     if (catches.length) {
       details.push(
          "" +
