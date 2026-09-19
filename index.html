@@ -329,10 +329,11 @@ document.getElementById("trading").innerText =
       analysis.coding || "Not mentioned";
 
     const catches = Array.isArray(analysis.catches)
-      document.getElementById("catchesTitle").style.display =
+  ? analysis.catches
+  : [];
+
+document.getElementById("catchesTitle").style.display =
   catches.length ? "block" : "none";
-      ? analysis.catches
-      : [];
 
     const requirements = Array.isArray(analysis.requirements)
       ? analysis.requirements
