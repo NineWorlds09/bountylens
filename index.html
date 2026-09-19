@@ -212,10 +212,17 @@ Prototype analyzer — results are extracted from the text you provide.
 <div class="card-value" id="deposit">Not detected</div>
 </div>
 
+
 <div class="card">
-<div class="card-title">📢 Public content</div>
-<div class="card-value" id="social">Not detected</div>
+  <div class="card-title">📈 Trading</div>
+  <div class="card-value" id="trading">Not detected</div>
 </div>
+
+<div class="card">
+  <div class="card-title">📣 Public content</div>
+  <div class="card-value" id="social">Not detected</div>
+</div>
+
 
 <div class="card">
 <div class="card-title">💻 Coding</div>
@@ -298,7 +305,8 @@ document.getElementById("payoutRange").innerText =
 
     document.getElementById("deposit").innerText =
       analysis.deposit || "Not mentioned";
-
+document.getElementById("trading").innerText =
+  analysis.trading || "Not mentioned";
     document.getElementById("social").innerText =
       analysis.publicContent || "Not mentioned";
 
