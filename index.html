@@ -233,7 +233,10 @@ Prototype analyzer — results are extracted from the text you provide.
 </div>
 
 </div>
-
+<div class="warning" id="scoreBreakdownCard">
+  <strong>📊 Why this score</strong>
+  <div id="scoreBreakdown">No score breakdown available.</div>
+</div>
 <div class="warning">
 <strong>⚠️ Possible catches</strong>
 <div id="warnings">None detected.</div>
@@ -289,6 +292,12 @@ const bountyUrl = document.getElementById("url").value.trim();
 const scoreBreakdown = Array.isArray(analysis.scoreBreakdown)
   ? analysis.scoreBreakdown
   : [];
+    document.getElementById("scoreBreakdown").innerHTML =
+  scoreBreakdown.length
+    ? scoreBreakdown.map(item => "• " + item).join("<br>")
+    : "No score breakdown available.";
+    document.getElementById("scoreBreakdownCard").style.display =
+  scoreBreakdown.length ? "block" : "none";
     document.getElementById("score").innerText =
       (analysis.score ?? "—") +
       "/100 — " +
@@ -328,12 +337,7 @@ document.getElementById("trading").innerText =
       : [];
 
     let details = [];
-if (scoreBreakdown.length) {
-  details.push(
-    "<strong>📊 Why this score</strong><br><br>" +
-    scoreBreakdown.map(item => "• " + item).join("<br>")
-  );
-}
+
     if (catches.length) {
       details.push(
          "" +
