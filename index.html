@@ -238,7 +238,7 @@ Prototype analyzer — results are extracted from the text you provide.
   <div id="scoreBreakdown">No score breakdown available.</div>
 </div>
 <div class="warning">
-<strong>⚠️ Possible catches</strong>
+<strong id="catchesTitle">⚠️ Possible catches</strong>
 <div id="warnings">None detected.</div>
 </div>
 
@@ -329,6 +329,8 @@ document.getElementById("trading").innerText =
       analysis.coding || "Not mentioned";
 
     const catches = Array.isArray(analysis.catches)
+      document.getElementById("catchesTitle").style.display =
+  catches.length ? "block" : "none";
       ? analysis.catches
       : [];
 
